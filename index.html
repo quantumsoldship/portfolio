@@ -104,31 +104,41 @@
 <body>
     <h1> isaac northington, graphic designer</h1>
     <h3 class="subtitle">also a high school student based out of Raleigh, NC</h3>
-    <div class="container">
-        <div class="grid-item"><img src="images/image1.png" alt="Image 1"></div>
-        <div class="grid-item"><img src="images/image2.png" alt="Image 2"></div>
-        <div class="grid-item"><img src="images/image3.png" alt="Image 3"></div>
-        <div class="grid-item"><img src="images/image4.png" alt="Image 4"></div>
-        <div class="grid-item wide"><img src="images/image5.jpg" alt="Image 5"></div>
-        <!-- Add more grid items as needed -->
+    <div class="container" id="collage-container">
+        <!-- Images will be dynamically inserted here -->
     </div>
     <script>
-    document.addEventListener('DOMContentLoaded', () => {
-        const gridItems = document.querySelectorAll('.grid-item');
+        document.addEventListener('DOMContentLoaded', () => {
+            fetch('images.json')
+                .then(response => response.json())
+                .then(images => {
+                    const container = document.getElementById('collage-container');
+                    images.forEach(image => {
+                        const div = document.createElement('div');
+                        div.className = 'grid-item'; // Adjust classes if needed
+                        const img = document.createElement('img');
+                        img.src = 'images/' + image;
+                        img.alt = image;
+                        div.appendChild(img);
+                        container.appendChild(div);
+                    });
 
-        const fadeInOnScroll = () => {
-            const windowHeight = window.innerHeight;
-            gridItems.forEach(item => {
-                const rect = item.getBoundingClientRect();
-                if (rect.top < windowHeight && rect.bottom >= 0) {
-                    item.classList.add('visible');
-                }
-            });
-        };
+                    // Initialize visibility for fade-in effect
+                    const gridItems = document.querySelectorAll('.grid-item');
+                    const fadeInOnScroll = () => {
+                        const windowHeight = window.innerHeight;
+                        gridItems.forEach(item => {
+                            const rect = item.getBoundingClientRect();
+                            if (rect.top < windowHeight && rect.bottom >= 0) {
+                                item.classList.add('visible');
+                            }
+                        });
+                    };
 
-        window.addEventListener('scroll', fadeInOnScroll);
-        fadeInOnScroll(); // Initial check to show items that are already in view
-    });
-</script>
+                    window.addEventListener('scroll', fadeInOnScroll);
+                    fadeInOnScroll(); // Initial check
+                });
+        });
+    </script>
 </body>
 </html>
