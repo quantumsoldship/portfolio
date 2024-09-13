@@ -11,6 +11,12 @@
             font-weight: normal;
             font-style: normal;
         }
+        @font-face {
+            font-family: 'Marco';
+            src: url('Marco.ttf') format('ttf');
+            font-weight: normal;
+            font-style: normal;
+        }
         body {
             background-color: #181818;
             margin: 0;
@@ -64,7 +70,9 @@
         image {
             border-radius: 10px
         }
-
+        .subtitle {
+            font-family: Marco, sans-serif;
+        }
         h1 {
             font-size: 80px;
             color: white;
@@ -75,6 +83,7 @@
 </head>
 <body>
     <h1> isaac northington, graphic designer</h1>
+    <h3 class="subtitle">high school student based out of Raleigh, NC</h3>
     <div class="container">
         <div class="grid-item"><img src="images/image1.png" alt="Image 1"></div>
         <div class="grid-item"><img src="images/image2.png" alt="Image 2"></div>
