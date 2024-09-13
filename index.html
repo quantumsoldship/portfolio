@@ -30,9 +30,22 @@
         }
 
         .grid-item {
-        opacity: 0;
-        transform: translateY(20px);
-        transition: opacity 1.2s ease, transform 0.6s ease;
+            position: relative;
+            overflow: hidden;
+            border-radius: 10px;
+            opacity: 0;
+            transform: translateY(20px); /* Starts from a bit lower */
+            transition: opacity 0.6s ease, transform 0.6s ease;
+        }
+
+        /* Example of an image that spans across 2 columns */
+        .grid-item.wide {
+            grid-column: span 2;
+        }
+
+        /* Example of an image that spans across 3 columns */
+        .grid-item.wider {
+            grid-column: span 3;
         }
 
         .grid-item.visible {
@@ -95,7 +108,7 @@
         <div class="grid-item"><img src="images/image2.png" alt="Image 2"></div>
         <div class="grid-item"><img src="images/image3.png" alt="Image 3"></div>
         <div class="grid-item"><img src="images/image4.png" alt="Image 4"></div>
-        <div class="grid-item"><img src="images/image5.jpg" alt="Image 5"></div>
+        <div class="grid-item wide"><img src="images/image5.jpg" alt="Image 5"></div>
         <!-- Add more grid items as needed -->
     </div>
     <script>
