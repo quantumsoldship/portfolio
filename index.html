@@ -84,22 +84,22 @@
         <!-- Add more grid items as needed -->
     </div>
     <script>
-        document.addEventListener('DOMContentLoaded', () => {
-            const gridItems = document.querySelectorAll('.grid-item');
+    document.addEventListener('DOMContentLoaded', () => {
+        const gridItems = document.querySelectorAll('.grid-item');
 
-            const fadeInOnScroll = () => {
-                const windowHeight = window.innerHeight;
-                gridItems.forEach(item => {
-                    const rect = item.getBoundingClientRect();
-                    if (rect.top < windowHeight && rect.bottom >= 0) {
-                        item.classList.add('visible');
-                    }
-                });
-            };
+        const fadeInOnScroll = () => {
+            const windowHeight = window.innerHeight;
+            gridItems.forEach(item => {
+                const rect = item.getBoundingClientRect();
+                if (rect.top < windowHeight && rect.bottom >= 0) {
+                    item.classList.add('visible');
+                }
+            });
+        };
 
-            window.addEventListener('scroll', fadeInOnScroll);
-            fadeInOnScroll(); // Initial check
-        });
-    </script>
+        window.addEventListener('scroll', fadeInOnScroll);
+        fadeInOnScroll(); // Initial check to show items that are already in view
+    });
+</script>
 </body>
 </html>
