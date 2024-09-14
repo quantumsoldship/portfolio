@@ -181,24 +181,23 @@ Here's my code
 
                     images.forEach(image => {
                         // Check if the file is an image by its extension
-                        const isImage = imageExtensions.some(ext => image.endsWith(ext));
-                        if (isImage) {
-                            const div = document.createElement('div');
-                            div.className = 'grid-item'; // Initial class
 
-                            const img = document.createElement('img');
-                            img.src = 'images/' + image;
-                            img.alt = image;
+                        const div = document.createElement('div');
+                        div.className = 'grid-item'; // Initial class
 
-                            // Wait until the image is fully loaded to check its dimensions
-                            img.onload = function() {
-                                const aspectRatio = img.naturalWidth / img.naturalHeight;
-                                if (aspectRatio >= 2 && aspectRatio < 3) {
-                                    div.classList.add('wide'); // 2:1 aspect ratio
-                                } else if (aspectRatio >= 3) {
-                                    div.classList.add('wider'); // 3:1 aspect ratio
-                                }
-                            };
+                        const img = document.createElement('img');
+                        img.src = 'images/' + image;
+                        img.alt = image;
+
+                        // Wait until the image is fully loaded to check its dimensions
+                        img.onload = function() {
+                            const aspectRatio = img.naturalWidth / img.naturalHeight;
+                            if (aspectRatio >= 2 && aspectRatio < 3) {
+                                div.classList.add('wide'); // 2:1 aspect ratio
+                            } else if (aspectRatio >= 3) {
+                                div.classList.add('wider'); // 3:1 aspect ratio
+                            }
+                        };
 
                             div.appendChild(img);
                             container.appendChild(div);
