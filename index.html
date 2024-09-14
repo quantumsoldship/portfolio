@@ -101,10 +101,21 @@
             width: 100vw;
             height: 100vh;
             background: rgba(0, 0, 0, 0.8);
-            backdrop-filter: blur(10px); /* Adds the blur effect */
+            backdrop-filter: blur(10px);
             justify-content: center;
             align-items: center;
             z-index: 1000;
+
+            /* Add transition and initial state */
+            opacity: 0;
+            transform: scale(0.9); /* Start with slight scaling */
+            transition: opacity 0.5s ease, transform 0.5s ease; /* Duration and easing for transition */
+        }
+
+        .overlay.show {
+            opacity: 1;
+            transform: scale(1); /* Scale back to normal */
+            display: flex; /* Display flex when visible */
         }
 
         .overlay img {
@@ -202,21 +213,24 @@
 
                             // Click event to open the fullscreen view
                             img.addEventListener('click', () => {
-    // Remove the file extension from the image name
                                 const filenameWithoutExtension = img.alt.replace(/\.[^/.]+$/, '');
 
                                 fullscreenImage.src = img.src;
-                                filenameElement.textContent = filenameWithoutExtension; // Set the title without the extension
-                                overlay.style.display = 'flex'; // Show the <overlay>
+                                filenameElement.textContent = filenameWithoutExtension;
 
+                                // Show the overlay with transition
+                                overlay.classList.add('show');
                             });
-                        }
-                    });
 
-                    // Close the overlay
-                    closeBtn.addEventListener('click', () => {
-                        overlay.style.display = 'none';
-                    });
+                            closeBtn.addEventListener('click', () => {
+                                // Hide the overlay and reset styles with transition
+                                overlay.classList.remove('show');
+
+                                // To ensure the overlay is fully removed from view, wait for the transition to finish
+                                setTimeout(() => {
+                                    overlay.style.display = 'none'; // Hide after the transition
+                                }, 500); // Matches the 0.5s transition duration
+                            });
 
                     // Initialize visibility for fade-in effect
                     const gridItems = document.querySelectorAll('.grid-item');
