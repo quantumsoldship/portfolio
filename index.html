@@ -38,12 +38,10 @@
             transition: opacity 0.6s ease, transform 0.6s ease;
         }
 
-        /* Example of an image that spans across 2 columns */
         .grid-item.wide {
             grid-column: span 2;
         }
 
-        /* Example of an image that spans across 3 columns */
         .grid-item.wider {
             grid-column: span 3;
         }
@@ -62,33 +60,19 @@
             opacity: 0;
         }
 
-
         img {
             grid-column: span 3;
         }
-
-
 
         .grid-item.visible img {
             opacity: 1;
         }
 
-        /* Optional: To make some images larger/smaller */
-
-
-
-        /* Optional: To make some images larger/smaller */
-
-        image {
-            border-radius: 10px
-        }
         h3 {
             font-family: Macro, sans-serif;
             color: white;
             padding-left: 20px;
             font-size: 80px;
-
-
         }
         h1 {
             margin-top: 10px;
@@ -96,32 +80,97 @@
             font-size: 160px;
             color: white;
             margin-left: 20px;
-
-            max-width: 90vh
+            max-width: 90vh;
         }
 
         h6 {
-            font-family: Macro,sans-serif;
+            font-family: Macro, sans-serif;
             padding-left: 20px;
             padding-bottom: 80px;
             color: white;
-            font-size:20px;
+            font-size: 20px;
+        }
+
+        /* Fullscreen Overlay Styles */
+        .overlay {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100vw;
+            height: 100vh;
+            background: rgba(0, 0, 0, 0.8);
+            backdrop-filter: blur(10px); /* Adds the blur effect */
+            justify-content: center;
+            align-items: center;
+            z-index: 1000;
+        }
+
+        .overlay img {
+            max-width: 80%;
+            max-height: 80%;
+            border-radius: 20px;
+        }
+
+        .overlay .filename {
+            position: absolute;
+            top: 20px;
+            color: white;
+            font-family: Macro, sans-serif;
+            font-size: 30px;
+        }
+
+        .overlay .categories {
+            position: absolute;
+            bottom: 20px;
+            color: white;
+            font-family: Macro, sans-serif;
+            font-size: 20px;
+        }
+
+        .overlay .close-btn {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            background-color: transparent;
+            border: none;
+            font-size: 30px;
+            color: white;
+            cursor: pointer;
+            transition: color 0.3s ease;
+        }
+
+        .overlay .close-btn:hover {
+            color: red; /* Turns red on hover */
         }
     </style>
 </head>
 <body>
-    <h1> isaac northington, graphic designer</h1>
+    <h1>Isaac Northington, Graphic Designer</h1>
     <h3 class="subtitle">also a high school student based out of Raleigh, NC</h3>
-    <h6> view some of my work ↓</h6>
+    <h6>view some of my work ↓</h6>
     <div class="container" id="collage-container">
         <!-- Images will be dynamically inserted here -->
     </div>
+
+    <!-- Fullscreen Overlay -->
+    <div class="overlay" id="image-overlay">
+        <button class="close-btn" id="close-btn">×</button>
+        <img src="" alt="Fullscreen Image" id="fullscreen-image">
+        <div class="filename" id="filename"></div>
+        <div class="categories" id="categories">GRAPHIC / UI/UX</div>
+    </div>
+
     <script>
         document.addEventListener('DOMContentLoaded', () => {
             fetch('images.json')
                 .then(response => response.json())
                 .then(images => {
                     const container = document.getElementById('collage-container');
+                    const overlay = document.getElementById('image-overlay');
+                    const fullscreenImage = document.getElementById('fullscreen-image');
+                    const filenameElement = document.getElementById('filename');
+                    const closeBtn = document.getElementById('close-btn');
 
                     // List of allowed image file extensions
                     const imageExtensions = ['.jpg', '.jpeg', '.png', '.gif', '.bmp', '.webp'];
@@ -149,7 +198,19 @@
 
                             div.appendChild(img);
                             container.appendChild(div);
+
+                            // Click event to open the fullscreen view
+                            img.addEventListener('click', () => {
+                                fullscreenImage.src = img.src;
+                                filenameElement.textContent = img.alt; // Use the filename as the text
+                                overlay.style.display = 'flex'; // Show the overlay
+                            });
                         }
+                    });
+
+                    // Close the overlay
+                    closeBtn.addEventListener('click', () => {
+                        overlay.style.display = 'none';
                     });
 
                     // Initialize visibility for fade-in effect
