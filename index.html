@@ -33,10 +33,41 @@
             position: relative;
             overflow: hidden;
             border-radius: 20px;
-
             opacity: 0;
             transform: translateY(20px); /* Starts from a bit lower */
             transition: opacity 0.6s ease, transform 0.6s ease;
+        }
+
+        .grid-item .title-overlay {
+            position: absolute;
+            top: 10px;
+            left: 10px;
+            background: rgba(0, 0, 0, 0.7); /* Slightly transparent background */
+            color: white;
+            padding: 5px 10px;
+            border-radius: 5px;
+            font-family: Macro, sans-serif;
+            font-size: 18px;
+            opacity: 0;
+            transition: opacity 0.3s ease;
+            pointer-events: none; /* Prevents interference with image hover */
+        }
+
+        .grid-item:hover .title-overlay {
+            opacity: 1; /* Shows the title on hover */
+        }
+
+        .grid-item img {
+            border-radius: 20px;
+            width: 100%;
+            height: auto;
+            display: block;
+            transition: opacity 0.8s ease-in;
+            opacity: 0;
+        }
+
+        .grid-item.visible img {
+            opacity: 1;
         }
 
         .grid-item.wide {
@@ -196,6 +227,16 @@
                     img.src = 'images/' + image;
                     img.alt = image;
 
+                    // Create title overlay
+                    const titleOverlay = document.createElement('div');
+                    titleOverlay.className = 'title-overlay';
+                    titleOverlay.textContent = image; // Use the filename as the title
+
+                    // Append title overlay to the grid item
+                    div.appendChild(titleOverlay);
+                    div.appendChild(img);
+                    container.appendChild(div);
+
                     // Wait until the image is fully loaded to check its dimensions
                     img.onload = function() {
                         const aspectRatio = img.naturalWidth / img.naturalHeight;
@@ -205,9 +246,6 @@
                             div.classList.add('wider'); // 3:1 aspect ratio
                         }
                     };
-
-                    div.appendChild(img);
-                    container.appendChild(div);
 
                     // Click event to open the fullscreen view
                     img.addEventListener('click', () => {
