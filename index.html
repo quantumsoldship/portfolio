@@ -73,6 +73,7 @@
             color: white;
             padding-left: 20px;
             font-size: 80px;
+            margin-bottom: 10px;
         }
         h1 {
             margin-top: 10px;
@@ -99,54 +100,70 @@
             left: 0;
             width: 100vw;
             height: 100vh;
-            background: rgba(0, 0, 0, 0.8);
-            backdrop-filter: blur(10px); /* Adds the blur effect */
+            background: rgba(0, 0, 0, 0);
+            backdrop-filter: blur(0px);
             justify-content: center;
             align-items: center;
             z-index: 1000;
+            transition: backdrop-filter 0.5s ease, background 0.5s ease;
         }
 
         .overlay img {
             max-width: 80%;
             max-height: 80%;
             border-radius: 20px;
+            transform: scale(0.8);
+            transition: transform 0.5s ease, opacity 0.5s ease;
         }
 
         .overlay .filename {
             position: absolute;
-            top: 20px;
+            bottom: 50px;
             color: white;
             font-family: Macro, sans-serif;
             font-size: 30px;
+            background-color: rgba(0, 0, 0, 0.7);
+            padding: 10px 20px;
+            border-radius: 10px;
         }
 
         .overlay .categories {
             position: absolute;
-            bottom: 20px;
-            color: white;
-            font-family: Alinsa, sans-serif;
-            font-size: 20px;
-        }
-
-        .overlay .close-btn {
-            position: absolute;
             top: 20px;
-            right: 20px;
-            background-color: transparent;
-            border: none;
-            font-size: 30px;
+            left: 20px;
             color: white;
-            cursor: pointer;
-            transition: color 0.3s ease;
+            font-family: Macro, sans-serif;
+            font-size: 20px;
+            background-color: rgba(0, 0, 0, 0.7);
+            padding: 5px 15px;
+            border-radius: 10px;
         }
 
-        .overlay .close-btn:hover {
-            color: red; /* Turns red on hover */
+        /* Animation States */
+        .overlay.active {
+            display: flex;
+            background: rgba(0, 0, 0, 0.8);
+            backdrop-filter: blur(10px);
+        }
+
+        .overlay.active img {
+            transform: scale(1);
+            opacity: 1;
+        }
+
+        .overlay.closing img {
+            transform: scale(0.8);
+            opacity: 0;
+        }
+
+        .overlay.closing {
+            backdrop-filter: blur(0px);
+            background: rgba(0, 0, 0, 0);
         }
     </style>
 </head>
 <body>
-    <h1>Isaac Northington, Graphic Designer</h1>
+    <h1>isaac Northington, graphic Designer</h1>
     <h3 class="subtitle">also a high school student based out of Raleigh, NC</h3>
     <h6>view some of my work ↓</h6>
     <div class="container" id="collage-container">
@@ -155,11 +172,11 @@
 
     <!-- Fullscreen Overlay -->
     <div class="overlay" id="image-overlay">
-        <button class="close-btn" id="close-btn">×</button>
         <img src="" alt="Fullscreen Image" id="fullscreen-image">
         <div class="filename" id="filename"></div>
-        <div class="categories" id="categories">isaac northington</div>
+        <div class="categories" id="categories">GRAPHIC / UI/UX</div>
     </div>
+
     <script>
         document.addEventListener('DOMContentLoaded', () => {
             fetch('images.json')
@@ -169,21 +186,21 @@
                     const overlay = document.getElementById('image-overlay');
                     const fullscreenImage = document.getElementById('fullscreen-image');
                     const filenameElement = document.getElementById('filename');
-                    const closeBtn = document.getElementById('close-btn');
+                    const categoriesElement = document.getElementById('categories');
 
                     // List of allowed image file extensions
                     const imageExtensions = ['.jpg', '.jpeg', '.png', '.gif', '.bmp', '.webp'];
 
-                    images.forEach(image => {
+                    images.forEach(imageData => {
                         // Check if the file is an image by its extension
-                        const isImage = imageExtensions.some(ext => image.endsWith(ext));
+                        const isImage = imageExtensions.some(ext => imageData.filename.endsWith(ext));
                         if (isImage) {
                             const div = document.createElement('div');
                             div.className = 'grid-item'; // Initial class
 
                             const img = document.createElement('img');
-                            img.src = 'images/' + image;
-                            img.alt = image;
+                            img.src = 'images/' + imageData.filename;
+                            img.alt = imageData.filename;
 
                             // Wait until the image is fully loaded to check its dimensions
                             img.onload = function() {
@@ -199,17 +216,22 @@
                             container.appendChild(div);
 
                             // Click event to open the fullscreen view
-                            img.addEventListener('click', () => {
+                            img.addEventListener('click', (e) => {
+                                e.stopPropagation(); // Prevent background click
                                 fullscreenImage.src = img.src;
                                 filenameElement.textContent = img.alt; // Use the filename as the text
-                                overlay.style.display = 'flex'; // Show the overlay
+                                categoriesElement.textContent = imageData.category; // Display the category
+                                overlay.classList.add('active');
                             });
                         }
                     });
 
-                    // Close the overlay
-                    closeBtn.addEventListener('click', () => {
-                        overlay.style.display = 'none';
+                    // Close the overlay by clicking anywhere on the overlay
+                    overlay.addEventListener('click', () => {
+                        overlay.classList.add('closing'); // Start closing animation
+                        setTimeout(() => {
+                            overlay.classList.remove('active', 'closing'); // Reset the state
+                        }, 500); // Match the animation duration
                     });
 
                     // Initialize visibility for fade-in effect
