@@ -103,58 +103,28 @@
             opacity: 1;
         }
 
-       header.main-header {
-            display: flex;
-            flex-direction: column;
-            justify-content: center; /* Center content vertically */
-            align-items: center; /* Center content horizontally */
-            height: 100vh; /* Full viewport height */
-            text-align: center; /* Center text horizontally */
-            color: white;
-            padding: 20px; /* Optional padding */
-        }
-
-        h1 {
-            font-family: Alinsa, sans-serif;
-            font-size: 8vw; /* Responsive font size */
-            margin: 0;
-            line-height: 1.2; /* Adjust line height */
-        }
-
         h3 {
             font-family: Macro, sans-serif;
-            font-size: 4vw; /* Responsive font size */
-            margin: 0;
-            line-height: 1.2; /* Adjust line height */
+            color: white;
+            padding-left: 20px;
+            font-size: 4vw;
+        }
+        h1 {
+            margin-top: 10px;
+            font-family: Alinsa, sans-serif;
+            font-size: 8vw; ;
+            color: white;
+            margin-left: 20px;
+            max-width: 90vh;
+            margin-bottom: 10px;
         }
 
         h6 {
             font-family: Macro, sans-serif;
-            font-size: 2vw; /* Responsive font size */
-            margin: 0;
-            line-height: 1.2; /* Adjust line height */
-        }
-
-        .fixed-header {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            background-color: #181818;
+            padding-left: 20px;
+            padding-bottom: 160px;
             color: white;
-            text-align: center;
-            padding: 10px;
-            font-family: Alinsa, sans-serif;
-            font-size: 1.5rem;
-            display: none; /* Initially hidden */
-            z-index: 1000; /* Ensure it stays on top */
-        }
-
-        .container {
-            display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(400px, 1fr));
-            gap: 20px;
-            padding: 20px;
+            font-size: 2vh;
         }
 
         /* Fullscreen Overlay Styles */
@@ -262,6 +232,19 @@
                     img.src = 'images/' + image;
                     img.alt = image;
 
+                    // Create title overlay
+                    const titleOverlay = document.createElement('div');
+                    titleOverlay.className = 'title-overlay';
+
+                    // Remove the file extension from the filename
+                    const fileNameWithoutExtension = image.replace(/\.[^/.]+$/, "");
+                    titleOverlay.textContent = fileNameWithoutExtension; // Set the title without extension
+
+                    // Append title overlay to the grid item
+                    div.appendChild(titleOverlay);
+                    div.appendChild(img);
+                    container.appendChild(div);
+
                     // Wait until the image is fully loaded to check its dimensions
                     img.onload = function() {
                         const aspectRatio = img.naturalWidth / img.naturalHeight;
@@ -271,9 +254,6 @@
                             div.classList.add('wider'); // 3:1 aspect ratio
                         }
                     };
-
-                    div.appendChild(img);
-                    container.appendChild(div);
 
                     // Click event to open the fullscreen view
                     img.addEventListener('click', () => {
@@ -293,36 +273,21 @@
 
             // Initialize visibility for fade-in effect
             const gridItems = document.querySelectorAll('.grid-item');
+
             const fadeInOnScroll = () => {
                 const windowHeight = window.innerHeight;
                 gridItems.forEach(item => {
                     const rect = item.getBoundingClientRect();
                     if (rect.top < windowHeight && rect.bottom >= 0) {
                         item.classList.add('visible');
+                    } else {
+                        item.classList.remove('visible'); // Remove class when item is out of view
                     }
                 });
             };
 
             window.addEventListener('scroll', fadeInOnScroll);
             fadeInOnScroll(); // Initial check
-
-            // Fixed header visibility
-            const fixedHeader = document.getElementById('fixed-header');
-            const mainHeader = document.querySelector('header.main-header');
-
-            const checkScroll = () => {
-                const scrollPosition = window.scrollY;
-                const mainHeaderHeight = mainHeader.offsetHeight;
-
-                if (scrollPosition > mainHeaderHeight) {
-                    fixedHeader.style.display = 'block'; // Show fixed header
-                } else {
-                    fixedHeader.style.display = 'none'; // Hide fixed header
-                }
-            };
-
-            window.addEventListener('scroll', checkScroll);
-            checkScroll(); // Initial check
         });
 });
     </script>
