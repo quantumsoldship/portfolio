@@ -231,10 +231,12 @@
                     img.alt = image;
 
                     // Create title overlay
-
                     const titleOverlay = document.createElement('div');
                     titleOverlay.className = 'title-overlay';
-                    titleOverlay.textContent = image; // Use the filename as the title
+
+                    // Remove the file extension from the filename
+                    const fileNameWithoutExtension = image.replace(/\.[^/.]+$/, "");
+                    titleOverlay.textContent = fileNameWithoutExtension; // Set the title without extension
 
                     // Append title overlay to the grid item
                     div.appendChild(titleOverlay);
