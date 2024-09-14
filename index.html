@@ -122,9 +122,14 @@
                 .then(response => response.json())
                 .then(images => {
                     const container = document.getElementById('collage-container');
+
+                    // List of allowed image file extensions
+                    const imageExtensions = ['.jpg', '.jpeg', '.png', '.gif', '.bmp', '.webp'];
+
                     images.forEach(image => {
-                        // Ignore .DS_Store files
-                        if (image !== '.DS_Store') {
+                        // Check if the file is an image by its extension
+                        const isImage = imageExtensions.some(ext => image.endsWith(ext));
+                        if (isImage) {
                             const div = document.createElement('div');
                             div.className = 'grid-item'; // Adjust classes if needed
                             const img = document.createElement('img');
