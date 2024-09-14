@@ -1,6 +1,3 @@
-Here's my code
-
-
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -166,73 +163,75 @@ Here's my code
     </div>
 
     <script>
-        document.addEventListener('DOMContentLoaded', () => {
-            fetch('images.json')
-                .then(response => response.json())
-                .then(images => {
-                    const container = document.getElementById('collage-container');
-                    const overlay = document.getElementById('image-overlay');
-                    const fullscreenImage = document.getElementById('fullscreen-image');
-                    const filenameElement = document.getElementById('filename');
-                    const closeBtn = document.getElementById('close-btn');
+    document.addEventListener('DOMContentLoaded', () => {
+        fetch('images.json')
+            .then(response => response.json())
+            .then(images => {
+                const container = document.getElementById('collage-container');
+                const overlay = document.getElementById('image-overlay');
+                const fullscreenImage = document.getElementById('fullscreen-image');
+                const filenameElement = document.getElementById('filename');
+                const closeBtn = document.getElementById('close-btn');
 
-                    // List of allowed image file extensions
-                    const imageExtensions = ['.jpg', '.jpeg', '.png', '.gif', '.bmp', '.webp'];
+                // List of allowed image file extensions
+                const imageExtensions = ['.jpg', '.jpeg', '.png', '.gif', '.bmp', '.webp'];
 
-                    images.forEach(image => {
-                        // Check if the file is an image by its extension
-                        const isImage = imageExtensions.some(ext => image.endsWith(ext));
-                        if (isImage) {
-                            const div = document.createElement('div');
-                            div.className = 'grid-item'; // Initial class
+                images.forEach(image => {
+                    // Check if the file is an image by its extension
+                    const isImage = imageExtensions.some(ext => image.endsWith(ext));
+                    if (isImage) {
+                        const div = document.createElement('div');
+                        div.className = 'grid-item'; // Initial class
 
-                            const img = document.createElement('img');
-                            img.src = 'images/' + image;
-                            img.alt = image;
+                        const img = document.createElement('img');
+                        img.src = 'images/' + image;
+                        img.alt = image;
 
-                            // Wait until the image is fully loaded to check its dimensions
-                            img.onload = function() {
-                                const aspectRatio = img.naturalWidth / img.naturalHeight;
-                                if (aspectRatio >= 2 && aspectRatio < 3) {
-                                    div.classList.add('wide'); // 2:1 aspect ratio
-                                } else if (aspectRatio >= 3) {
-                                    div.classList.add('wider'); // 3:1 aspect ratio
-                                }
-                            };
+                        // Wait until the image is fully loaded to check its dimensions
+                        img.onload = function() {
+                            const aspectRatio = img.naturalWidth / img.naturalHeight;
+                            if (aspectRatio >= 2 && aspectRatio < 3) {
+                                div.classList.add('wide'); // 2:1 aspect ratio
+                            } else if (aspectRatio >= 3) {
+                                div.classList.add('wider'); // 3:1 aspect ratio
+                            }
+                        };
 
-                            div.appendChild(img);
-                            container.appendChild(div);
+                        div.appendChild(img);
+                        container.appendChild(div);
 
-                            // Click event to open the fullscreen view
-                            img.addEventListener('click', () => {
+                        // Click event to open the fullscreen view
+                        img.addEventListener('click', () => {
+                            if (!image.includes('descriptor')) { // Check if 'descriptor' is not in the filename
                                 fullscreenImage.src = img.src;
                                 filenameElement.textContent = img.alt; // Use the filename as the text
                                 overlay.style.display = 'flex'; // Show the overlay
-                            });
-                        }
-                    });
-
-                    // Close the overlay
-                    closeBtn.addEventListener('click', () => {
-                        overlay.style.display = 'none';
-                    });
-
-                    // Initialize visibility for fade-in effect
-                    const gridItems = document.querySelectorAll('.grid-item');
-                    const fadeInOnScroll = () => {
-                        const windowHeight = window.innerHeight;
-                        gridItems.forEach(item => {
-                            const rect = item.getBoundingClientRect();
-                            if (rect.top < windowHeight && rect.bottom >= 0) {
-                                item.classList.add('visible');
                             }
                         });
-                    };
-
-                    window.addEventListener('scroll', fadeInOnScroll);
-                    fadeInOnScroll(); // Initial check
+                    }
                 });
-        });
+
+                // Close the overlay
+                closeBtn.addEventListener('click', () => {
+                    overlay.style.display = 'none';
+                });
+
+                // Initialize visibility for fade-in effect
+                const gridItems = document.querySelectorAll('.grid-item');
+                const fadeInOnScroll = () => {
+                    const windowHeight = window.innerHeight;
+                    gridItems.forEach(item => {
+                        const rect = item.getBoundingClientRect();
+                        if (rect.top < windowHeight && rect.bottom >= 0) {
+                            item.classList.add('visible');
+                        }
+                    });
+                };
+
+                window.addEventListener('scroll', fadeInOnScroll);
+                fadeInOnScroll(); // Initial check
+            });
+    });
     </script>
 </body>
 </html>
