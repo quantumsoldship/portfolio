@@ -202,9 +202,13 @@
 
                             // Click event to open the fullscreen view
                             img.addEventListener('click', () => {
+    // Remove the file extension from the image name
+                                const filenameWithoutExtension = img.alt.replace(/\.[^/.]+$/, '');
+
                                 fullscreenImage.src = img.src;
-                                filenameElement.textContent = img.alt; // Use the filename as the text
-                                overlay.style.display = 'flex'; // Show the overlay
+                                filenameElement.textContent = filenameWithoutExtension; // Set the title without the extension
+                                overlay.style.display = 'flex'; // Show the <overlay>
+
                             });
                         }
                     });
