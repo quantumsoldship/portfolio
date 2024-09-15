@@ -19,7 +19,7 @@
             font-style: normal;
         }
         body {
-            background-color: #07527C;
+            background-color: var(--arc-palette-foregroundSecondary), #07527C;
             margin: 0;
         }
 
@@ -192,9 +192,9 @@
         }
 
         .topbar {
-            padding-top: 30px
-            background-color: var(--arc-palette-foregroundSecondary, #07527C);
-            color: #FFF0DB;
+            padding-top: 30px;
+
+            color: color-contrast(var(--arc-palette-foregroundSecondary, #07527C) vs black, white);
             height: 100vh;
         }
 
