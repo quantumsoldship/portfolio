@@ -1,0 +1,45 @@
+{
+    "project": {
+        "name": "Field of Dreams",
+        "description": "Overall project explanation goes here.",
+        "keyColor": "#E43030",
+        "size": "2x1",
+        "icon": "./images/fod.png",
+        "images": [
+            {
+                "id": 1,
+                "src": "./images/fod/img1.png",
+                "alt": "Main logo (red FOD text with white outline on black background)",
+                "caption": "Main logo (red)"
+            },
+            {
+                "id": 2,
+                "src": "./images/fod/img2.png",
+                "alt": "Main logo (gray FOD text with white outline on black background)",
+                "caption": "Main logo (gray)"
+            },
+            {
+                "id": 3,
+                "src": "./images/fod/img3.png",
+                "alt": "Image description goes here",
+                "caption": "Optional caption"
+            },
+            {
+                "id": 4,
+                "src": "./images/fod/img4.png",
+                "alt": "Image description goes here",
+                "caption": "Optional caption"
+            },
+            {
+                "id": 5,
+                "src": "./images/fod/img5.png",
+                "alt": "Image description goes here",
+                "caption": "Optional caption"
+            }
+        ],
+        "metadata": {
+            "tags": [],
+            "link": ""
+        }
+    }
+}

@@ -1,0 +1,525 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Isaac Northington</title>
+    <style>
+        :root {
+            --site-bg: #0064FD;
+        }
+
+        @font-face {
+            font-family: 'Calla';
+            src: url('./fonts/calla.otf') format('opentype');
+            font-display: swap;
+        }
+
+        @font-face {
+            font-family: 'Megna';
+            src: url('./fonts/megna-mediumtext.woff') format('woff');
+            font-weight: normal;
+            font-style: normal;
+            font-display: swap;
+        }
+
+        .custom-cursor {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            background-color: white;
+            mix-blend-mode: difference;
+            pointer-events: none;
+            z-index: 9999;
+            opacity: 0; /* Hide initially */
+            transition: opacity 0.3s ease;
+            transform: translate(-50px, -50px); /* Start off-screen */
+            will-change: transform; /* Hint browser for GPU acceleration */
+        }
+
+        @media (max-width: 768px) {
+            .custom-cursor {
+                display: none !important;
+            }
+            body, .project-card, .back-button {
+                cursor: auto !important; /* Restore normal behavior on mobile */
+            }
+        }
+
+        body {
+            background-color: var(--site-bg);
+            background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.8' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)' opacity='0.12'/%3E%3C/svg%3E"), linear-gradient(to bottom, transparent 10%, rgba(0, 0, 0, 0.15) 100%);
+            background-size: 200px 200px, 100% 100%;
+            background-repeat: repeat, no-repeat;
+            color: white;
+            margin: 0;
+            box-sizing: border-box;
+            position: relative;
+            font-family: 'Megna', sans-serif;
+            overflow-x: hidden;
+            transition: background-color 0.5s ease;
+            cursor: none;
+        }
+
+        .hero {
+            height: 100vh;
+            position: relative;
+        }
+
+        .mobile-logo {
+            display: none;
+            position: absolute;
+            top: 5vw;
+            left: 5vw;
+            width: 30vw;
+            max-width: 200px;
+            z-index: 10;
+        }
+
+        h1 {
+            position: absolute;
+            bottom: 5vw;
+            right: 5vw;
+            font-family: 'Calla', sans-serif;
+            font-size: 12vw;
+            text-align: right;
+            margin: 0;
+            line-height: 1.1;
+            word-wrap: break-word;
+            max-width: 90vw;
+        }
+
+        /* Adjust sizing for larger screens, so it doesn't get ridiculously huge */
+        @media (min-width: 1200px) {
+            h1 {
+                font-size: 144px;
+            }
+        }
+
+        /* Portfolio Grid (3x3 on most screens) */
+        .portfolio-grid {
+            display: grid;
+            width: 100%; /* Take up full screen width */
+            box-sizing: border-box; /* Include padding in width */
+            /* 3 columns filling the available space */
+            grid-template-columns: repeat(3, 1fr);
+            /* Calculate row height to be perfectly square relative to width. */
+            grid-auto-rows: calc((100vw - 22vw) / 3);
+            gap: 6vw;
+            padding: 5vw;
+            grid-auto-flow: dense; /* Fill in gaps beautifully */
+        }
+
+        /* Go smaller (4 columns) on large screens */
+        @media (min-width: 1200px) {
+            .portfolio-grid {
+                grid-template-columns: repeat(4, 1fr);
+                /* 100vw - 10vw padding - 18vw total gap = 72vw / 4 */
+                grid-auto-rows: calc((100vw - 28vw) / 4);
+            }
+        }
+
+        .project-card {
+            background-color: white; /* Rectangle stays white */
+            border-radius: 48px;
+            position: relative;
+            cursor: none;
+            transition: transform 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94); /* Smoother, somewhat fast base transition */
+            overflow: hidden;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .project-card:hover {
+            transform: scale(0.98) translateY(-4px); /* Slight responsive bump */
+            box-shadow: 0 10px 20px rgba(0,0,0,0.1);
+        }
+
+        /* Subtract PNG from background using mask-image */
+        .project-mask {
+            width: 80%;
+            height: 80%;
+            /* Matches body color for cutout illusion */
+            background-color: var(--site-bg);
+            transition: background-color 0.5s ease, transform 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+            -webkit-mask-size: contain;
+            -webkit-mask-position: center;
+            -webkit-mask-repeat: no-repeat;
+            mask-size: contain;
+            mask-position: center;
+            mask-repeat: no-repeat;
+            /* Base scale is normal */
+            transform: scale(1);
+        }
+
+        /* Hover on card scales internal mask up */
+        .project-card:hover .project-mask {
+            transform: scale(1.1); /* Image pops up when you hover */
+        }
+
+        /* Sizing Classes matched from JSON */
+        .size-1x1 { grid-column: span 1; grid-row: span 1; }
+        .size-2x1 { grid-column: span 2; grid-row: span 1; }
+        .size-1x2 { grid-column: span 1; grid-row: span 2; }
+        .size-2x2 { grid-column: span 2; grid-row: span 2; }
+        .size-3x2 { grid-column: span 3; grid-row: span 2; }
+        .size-1x3 { grid-column: span 1; grid-row: span 3; }
+
+        /* Scale up logos inside 2x1 blocks specifically */
+        .size-2x1 .project-mask {
+            transform: scale(1.2); /* Slightly larger */
+        }
+        
+        .project-card.size-2x1:hover .project-mask {
+            transform: scale(1.3); /* Image pops up even more when you hover on 2x1 */
+        }
+        
+        /* Slide out animation class */
+        .slide-out {
+            transform: translateX(-150vw);
+            opacity: 0;
+            pointer-events: none;
+        }
+
+        /* Project View Container */
+        .project-view {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100vw;
+            min-height: 100vh;
+            padding: 5vw;
+            box-sizing: border-box;
+            background: transparent; /* inherits body background */
+            transform: translateX(100vw);
+            opacity: 0;
+            transition: transform 0.6s cubic-bezier(0.4, 0, 0.2, 1), opacity 0.6s ease;
+            z-index: 20;
+            pointer-events: none;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .project-view.active {
+            transform: translateX(0);
+            opacity: 1;
+            pointer-events: all;
+        }
+
+        .back-button {
+            background: none;
+            border: none;
+            color: white;
+            font-family: 'Calla', sans-serif;
+            font-size: 6vw;
+            cursor: none;
+            text-align: left;
+            margin-bottom: 4vw;
+            width: fit-content;
+            padding: 0;
+            transition: opacity 0.2s ease;
+        }
+        .back-button:hover { opacity: 0.7; }
+        
+        @media (min-width: 1200px) {
+            .back-button { font-size: 64px; }
+        }
+
+        .project-content h2 {
+            font-family: 'Calla', sans-serif;
+            font-size: 8vw;
+            margin: 0 0 2vw 0;
+            line-height: 1.1;
+        }
+        
+        .project-content p {
+            font-size: 1.2rem;
+            max-width: 800px;
+            line-height: 1.6;
+            margin-bottom: 4vw;
+        }
+
+        .project-images {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            grid-auto-rows: calc((100vw - 12vw) / 2); /* 90vw padding area - 2vw gap = 88vw / 2 = 44vw */
+            grid-auto-flow: dense;
+            gap: 2vw;
+            width: 100%;
+            margin-bottom: 4vw;
+        }
+
+        @media (min-width: 1200px) {
+            .project-images {
+                grid-template-columns: repeat(3, 1fr);
+                grid-auto-rows: calc((100vw - 14vw) / 3); /* 90vw padding area - 4vw total gap = 86vw / 3 = ~28.6vw */
+            }
+        }
+
+        .project-images img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            border-radius: 24px; /* rounded radius */
+            border: 4px solid white; /* white border */
+            display: block;
+            box-sizing: border-box;
+        }
+
+        .img-size-1x1 { grid-column: span 1; grid-row: span 1; }
+        .img-size-2x1 { grid-column: span 2; grid-row: span 1; }
+        .img-size-1x2 { grid-column: span 1; grid-row: span 2; }
+        .img-size-2x2 { grid-column: span 2; grid-row: span 2; }
+
+        /* Mobile Adjustments (2x2 or 1x1) */
+        @media (max-width: 768px) {
+            .mobile-logo {
+                display: block;
+                position: static;
+                width: 85vw; /* Made significantly bigger */
+                max-width: none;
+                margin: 0 auto;
+            }
+            .hero {
+                display: flex;
+                flex-direction: column;
+                justify-content: center;
+                align-items: center;
+                padding: 5vw;
+                height: 50vh;
+            }
+            .portfolio-grid {
+                /* 2 columns on tablet/large phones */
+                grid-template-columns: repeat(2, 1fr);
+                grid-auto-rows: calc((100vw - 12vw) / 2);
+            }
+            h1 {
+                display: none; /* Replaces the text entirely with the logo */
+            }
+            /* Ensure big cards don't break the 2-column mobile layout */
+            .size-3x2 { grid-column: span 2; } 
+        }
+
+        @media (max-width: 480px) {
+            .portfolio-grid {
+                /* 1 column on small phones */
+                grid-template-columns: 1fr;
+                grid-auto-rows: calc(100vw - 10vw);
+            }
+            /* Force all items into a single column safely */
+            .size-1x1, .size-2x1, .size-1x2, .size-2x2, .size-3x2, .size-1x3 {
+                grid-column: span 1;
+                grid-row: span 1;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="hero">
+        <img src="images/logo.png" alt="Logo" class="mobile-logo">
+        <h1>ISAAC<br>NORTHINGTON</h1>
+    </div>
+
+    <div class="portfolio-grid" id="portfolioGrid">
+        <!-- Projects dynamically injected here -->
+    </div>
+
+    <!-- Project Reveal Screen -->
+    <div class="project-view" id="projectView">
+        <button class="back-button" id="backBtn">&#8592;Back</button>
+        <div class="project-content">
+            <h2 id="projTitle">Project Title</h2>
+            <p id="projDesc">Project description goes here...</p>
+            <div id="projImages" class="project-images">
+                <!-- Images dynamically injected here -->
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Custom Cursor Logic
+        const customCursor = document.createElement('div');
+        customCursor.className = 'custom-cursor';
+        document.body.appendChild(customCursor);
+
+        let mouseX = -50, mouseY = -50;
+        let cursorX = -50, cursorY = -50;
+
+        document.addEventListener('mousemove', (e) => {
+            mouseX = e.clientX;
+            mouseY = e.clientY;
+            if (customCursor.style.opacity === '0' || customCursor.style.opacity === '') {
+                customCursor.style.opacity = '1';
+            }
+        });
+
+        document.addEventListener('mouseleave', (e) => {
+            // Push the cursor target off-screen depending on which edge it left from
+            const offScreenDist = 50;
+            if (e.clientX <= 0 || e.clientX < offScreenDist) mouseX = -offScreenDist;
+            else if (e.clientX >= window.innerWidth - 1) mouseX = window.innerWidth + offScreenDist;
+
+            if (e.clientY <= 0 || e.clientY < offScreenDist) mouseY = -offScreenDist;
+            else if (e.clientY >= window.innerHeight - 1) mouseY = window.innerHeight + offScreenDist;
+        });
+
+        document.addEventListener('mouseenter', () => {
+            customCursor.style.opacity = '1';
+        });
+
+        function animateCursor() {
+            // High smoothing factor for tight responsiveness
+            cursorX += (mouseX - cursorX) * 0.85;
+            cursorY += (mouseY - cursorY) * 0.85;
+            
+            // Apply coordinates via transform3d for best hardware acceleration
+            customCursor.style.transform = `translate3d(calc(${cursorX}px - 50%), calc(${cursorY}px - 50%), 0)`;
+            requestAnimationFrame(animateCursor);
+        }
+        
+        animateCursor();
+
+        const grid = document.getElementById('portfolioGrid');
+        const projectView = document.getElementById('projectView');
+        const backBtn = document.getElementById('backBtn');
+        let savedScrollPosition = 0;
+
+        // Back Button Logic
+        backBtn.addEventListener('click', () => {
+            // Restore Original Background
+            document.documentElement.style.setProperty('--site-bg', '#0064FD');
+            
+            // Hide Detail View
+            projectView.classList.remove('active');
+            
+            // Restore Cards with fluid delay
+            const allCards = document.querySelectorAll('.project-card');
+            allCards.forEach((c) => {
+                c.style.transitionDelay = '0s'; // Instant un-hide stagger
+                c.classList.remove('slide-out');
+            });
+            
+            // Restore Text & Logo Structure
+            document.querySelector('h1').style.transform = 'translateY(0)';
+            if(document.querySelector('.mobile-logo')) {
+                document.querySelector('.mobile-logo').style.transform = 'translateY(0)';
+            }
+            
+            // Restore exactly where the user was scrolled
+            window.scrollTo({
+                top: savedScrollPosition,
+                behavior: 'smooth'
+            });
+        });
+
+        async function loadProjects() {
+            let folderNames = [];
+
+            // 1. Fetch exactly the ordered list from projects/order.json
+            try {
+                const orderRes = await fetch('projects/order.json');
+                if (!orderRes.ok) throw new Error('Could not find order.json');
+                folderNames = await orderRes.json();
+            } catch (e) {
+                console.warn(e);
+                // Fallback sequence if fetching order crashes
+                folderNames = ["airball", "bc1", "callos", "fod", "gyrochord", "in"];
+            }
+
+            // 2. Load the JSONs iteratively based on the fetched order
+            for (const folder of folderNames) {
+                try {
+                    const res = await fetch(`projects/${folder}/${folder}.json`);
+                    if (!res.ok) continue;
+                    
+                    const data = await res.json();
+                    const proj = data.project;
+
+                    const card = document.createElement('div');
+                    const sizeClass = proj.size ? `size-${proj.size}` : 'size-1x1';
+                    card.className = `project-card ${sizeClass}`;
+                    
+                    const mask = document.createElement('div');
+                    mask.className = 'project-mask';
+                    mask.style.webkitMaskImage = `url(${proj.icon})`;
+                    mask.style.maskImage = `url(${proj.icon})`;
+                    card.appendChild(mask);
+
+                    const hoverColor = proj.keyColor || '#ffffff';
+
+                    // Click interaction ONLY (hover rules removed!)
+                    card.addEventListener('click', () => {
+                        // Save the scroll position before leaving the main grid
+                        savedScrollPosition = window.scrollY;
+
+                        // 1. Change background color locking it to this card
+                        document.documentElement.style.setProperty('--site-bg', hoverColor);
+
+                        // 2. Cascade cards off screen
+                        const allCards = document.querySelectorAll('.project-card');
+                        allCards.forEach((c) => {
+                            const delay = Math.random() * 0.2;
+                            c.style.transitionDelay = `${delay}s`;
+                            c.classList.add('slide-out');
+                        });
+                        
+                        document.querySelector('h1').style.transition = 'transform 0.6s ease';
+                        document.querySelector('h1').style.transform = 'translateY(-150vh)';
+
+                        if(document.querySelector('.mobile-logo')) {
+                            document.querySelector('.mobile-logo').style.transition = 'transform 0.6s ease';
+                            document.querySelector('.mobile-logo').style.transform = 'translateY(-150vh)';
+                        }
+
+                        // 3. Inject Details into the Real View Panel
+                        document.getElementById('projTitle').innerText = proj.name || folder;
+                        
+                        // Fetch Description from txt file
+                        document.getElementById('projDesc').innerText = 'Loading...';
+                        fetch(`projects/${folder}/description.txt`)
+                            .then(r => { if(r.ok) return r.text(); return proj.description || ''; })
+                            .then(text => document.getElementById('projDesc').innerText = text)
+                            .catch(() => document.getElementById('projDesc').innerText = proj.description || '');
+                        
+                        const imgContainer = document.getElementById('projImages');
+                        imgContainer.innerHTML = ''; // clear from previous visits
+                        if (proj.images && proj.images.length > 0) {
+                            proj.images.forEach(img => {
+                                const imgEl = document.createElement('img');
+                                imgEl.src = img.src;
+                                imgEl.alt = img.alt || '';
+                                // Determine grid size based on aspect ratio after loading
+                                imgEl.onload = () => {
+                                    const ratio = imgEl.naturalWidth / imgEl.naturalHeight;
+                                    if (ratio > 1.4) {
+                                        imgEl.classList.add('img-size-2x1');
+                                    } else if (ratio < 0.7) {
+                                        imgEl.classList.add('img-size-1x2');
+                                    } else {
+                                        imgEl.classList.add('img-size-1x1');
+                                    }
+                                };
+                                imgContainer.appendChild(imgEl);
+                            });
+                        }
+
+                        // 4. Slide in the Full View Panel and Scroll Top
+                        window.scrollTo(0, 0);
+                        projectView.classList.add('active');
+                    });
+
+                    grid.appendChild(card);
+                } catch (e) {
+                    console.log(`Could not load ${folder}.json. Check network or JSON syntax.`, e);
+                }
+            }
+        }
+
+        loadProjects();
+    </script>
+</body>
+</html>

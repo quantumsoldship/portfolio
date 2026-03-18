@@ -1,0 +1,27 @@
+{
+    "project": {
+        "name": "Airball",
+        "description": "Airball is a sport made by a friend. Each year we host an annual championship along with leagues in the summer. In addition, we sell t-shirts, stickers, hoodies, and hats designed which I designed.",
+        "keyColor": "#1CA2B3",
+        "size": "2x2",
+        "icon": "./images/airball.png",
+        "images": [
+            {
+                "id": 1,
+                "src": "./images/airball/img_1.png",
+                "alt": "The main logo for airball.",
+                "caption": "The main logo for airball."
+            },
+            {
+                "id": 2,
+                "src": "./images/airball/img_2.png",
+                "alt": "The logo for airball leagues.",
+                "caption": "The logo for airball leagues."
+            }
+        ],
+        "metadata": {
+            "tags": [],
+            "link": ""
+        }
+    }
+}

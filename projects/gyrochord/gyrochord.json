@@ -1,0 +1,27 @@
+{
+    "project": {
+        "name": "Gyrochord",
+        "description": "Overall project explanation goes here.",
+        "keyColor": "#FFC600",
+        "size": "2x1",
+        "icon": "./images/gyrochord.png",
+        "images": [
+            {
+                "id": 1,
+                "src": "./images/image-1.png",
+                "alt": "Image description goes here",
+                "caption": "Optional caption"
+            },
+            {
+                "id": 2,
+                "src": "./images/image-2.png",
+                "alt": "Image description goes here",
+                "caption": "Optional caption"
+            }
+        ],
+        "metadata": {
+            "tags": [],
+            "link": ""
+        }
+    }
+}

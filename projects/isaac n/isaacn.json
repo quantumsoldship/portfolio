@@ -1,0 +1,27 @@
+{
+    "project": {
+        "name": "Isaac Northington",
+        "description": "Overall project explanation goes here.",
+        "keyColor": "#000000",
+        "size": "2x2",
+        "icon": "./images/in.png",
+        "images": [
+            {
+                "id": 1,
+                "src": "./images/image-1.png",
+                "alt": "Image description goes here",
+                "caption": "Optional caption"
+            },
+            {
+                "id": 2,
+                "src": "./images/image-2.png",
+                "alt": "Image description goes here",
+                "caption": "Optional caption"
+            }
+        ],
+        "metadata": {
+            "tags": [],
+            "link": ""
+        }
+    }
+}
