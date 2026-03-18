@@ -1,1 +1,1 @@
-Overall project explanation goes here.
+Gyrochord is a synth engine for a small game console called Playdate (www.play.date) I designed the program and made assets for the official game catalog, which has a less than 300 games that are officialy sold by the maker and accesible on-device, in comparison to the multiple thousand sold unoficially. 
