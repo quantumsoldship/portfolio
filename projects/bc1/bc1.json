@@ -8,15 +8,93 @@
         "images": [
             {
                 "id": 1,
-                "src": "./images/image-1.png",
-                "alt": "Image description goes here",
-                "caption": "Optional caption"
+                "src": "./images/bc1/img1.png",
+                "alt": "BC1 Image 1",
+                "caption": ""
             },
             {
                 "id": 2,
-                "src": "./images/image-2.png",
-                "alt": "Image description goes here",
-                "caption": "Optional caption"
+                "src": "./images/bc1/img2.png",
+                "alt": "BC1 Image 2",
+                "caption": ""
+            },
+            {
+                "id": 3,
+                "src": "./images/bc1/img3.png",
+                "alt": "BC1 Image 3",
+                "caption": ""
+            },
+            {
+                "id": 4,
+                "src": "./images/bc1/img4.png",
+                "alt": "BC1 Image 4",
+                "caption": ""
+            },
+            {
+                "id": 5,
+                "src": "./images/bc1/img5.png",
+                "alt": "BC1 Image 5",
+                "caption": ""
+            },
+            {
+                "id": 6,
+                "src": "./images/bc1/img6.png",
+                "alt": "BC1 Image 6",
+                "caption": ""
+            },
+            {
+                "id": 7,
+                "src": "./images/bc1/img7.png",
+                "alt": "BC1 Image 7",
+                "caption": ""
+            },
+            {
+                "id": 8,
+                "src": "./images/bc1/img8.png",
+                "alt": "BC1 Image 8",
+                "caption": ""
+            },
+            {
+                "id": 9,
+                "src": "./images/bc1/img9.png",
+                "alt": "BC1 Image 9",
+                "caption": ""
+            },
+            {
+                "id": 10,
+                "src": "./images/bc1/img10.png",
+                "alt": "BC1 Image 10",
+                "caption": ""
+            },
+            {
+                "id": 11,
+                "src": "./images/bc1/img11.png",
+                "alt": "BC1 Image 11",
+                "caption": ""
+            },
+            {
+                "id": 12,
+                "src": "./images/bc1/img12.png",
+                "alt": "BC1 Image 12",
+                "caption": ""
+            },
+            {
+                "id": 13,
+                "src": "./images/bc1/img13.png",
+                "alt": "BC1 Image 13",
+                "caption": ""
+            },
+            {
+                "id": 14,
+                "src": "./images/bc1/img14.png",
+                "alt": "BC1 Image 14",
+                "caption": ""
+            },
+            {
+                "id": 15,
+                "src": "./images/bc1/img15.png",
+                "alt": "BC1 Image 15",
+                "caption": ""
             }
         ],
         "metadata": {

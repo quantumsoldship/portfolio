@@ -6,7 +6,7 @@
     <title>Isaac Northington</title>
     <style>
         :root {
-            --site-bg: #0064FD;
+            --site-bg: #488258;
         }
 
         @font-face {
@@ -79,10 +79,18 @@
             z-index: 10;
         }
 
-        h1 {
+        .hero-content {
             position: absolute;
             bottom: 5vw;
             right: 5vw;
+            display: flex;
+            flex-direction: column;
+            align-items: flex-end;
+            gap: 1.5vw;
+            z-index: 10;
+        }
+
+        h1 {
             font-family: 'Calla', sans-serif;
             font-size: 12vw;
             text-align: right;
@@ -92,10 +100,34 @@
             max-width: 90vw;
         }
 
+        .contact-btn {
+            font-family: 'Megna', sans-serif;
+            background-color: white;
+            color: var(--site-bg);
+            text-decoration: none;
+            padding: 1vw 2.5vw;
+            border-radius: 50px;
+            font-size: 1.5rem;
+            display: inline-flex;
+            align-items: center;
+            gap: 10px;
+            transition: transform 0.2s ease, opacity 0.2s ease;
+            cursor: none;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+        }
+
+        .contact-btn:hover {
+            transform: scale(1.05);
+        }
+
         /* Adjust sizing for larger screens, so it doesn't get ridiculously huge */
         @media (min-width: 1200px) {
             h1 {
                 font-size: 144px;
+            }
+            .contact-btn {
+                font-size: 24px;
+                padding: 15px 35px;
             }
         }
 
@@ -127,7 +159,8 @@
             border-radius: 48px;
             position: relative;
             cursor: none;
-            transition: transform 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94); /* Smoother, somewhat fast base transition */
+            transition: transform 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94), opacity 0.4s ease, box-shadow 0.4s ease;
+            will-change: transform, opacity;
             overflow: hidden;
             display: flex;
             justify-content: center;
@@ -135,7 +168,7 @@
         }
 
         .project-card:hover {
-            transform: scale(0.98) translateY(-4px); /* Slight responsive bump */
+            transform: scale(0.98) translate3d(0, -4px, 0); /* Slight responsive bump */
             box-shadow: 0 10px 20px rgba(0,0,0,0.1);
         }
 
@@ -180,7 +213,7 @@
         
         /* Slide out animation class */
         .slide-out {
-            transform: translateX(-150vw);
+            transform: scale(0.95);
             opacity: 0;
             pointer-events: none;
         }
@@ -195,9 +228,10 @@
             padding: 5vw;
             box-sizing: border-box;
             background: transparent; /* inherits body background */
-            transform: translateX(100vw);
+            transform: translate3d(0, 5vh, 0);
             opacity: 0;
-            transition: transform 0.6s cubic-bezier(0.4, 0, 0.2, 1), opacity 0.6s ease;
+            transition: transform 0.45s cubic-bezier(0.25, 0.46, 0.45, 0.94), opacity 0.45s ease;
+            will-change: transform, opacity;
             z-index: 20;
             pointer-events: none;
             display: flex;
@@ -205,9 +239,26 @@
         }
 
         .project-view.active {
-            transform: translateX(0);
+            transform: translate3d(0, 0, 0);
             opacity: 1;
             pointer-events: all;
+        }
+
+        .project-view-logo {
+            position: absolute;
+            top: 2vw; /* moved up more */
+            right: 5vw;
+            width: 80vw;
+            max-width: 600px;
+            opacity: 0.5;
+            z-index: 0;
+            pointer-events: none;
+            filter: brightness(0) invert(1);
+        }
+
+        .project-content {
+            position: relative;
+            z-index: 1;
         }
 
         .back-button {
@@ -231,13 +282,13 @@
 
         .project-content h2 {
             font-family: 'Calla', sans-serif;
-            font-size: 8vw;
+            font-size: clamp(2.5rem, 8vw, 6rem);
             margin: 0 0 2vw 0;
             line-height: 1.1;
         }
         
         .project-content p {
-            font-size: 1.2rem;
+            font-size: clamp(1rem, 2.5vw, 1.25rem);
             max-width: 800px;
             line-height: 1.6;
             margin-bottom: 4vw;
@@ -276,6 +327,7 @@
             object-fit: contain; /* ensures whole image is visible */
             border-radius: 24px; /* rounded radius */
             border: 8px solid white; /* thicker outline by 2x */
+            background-color: white; /* Ensure transparent PNGs stay opaque over the background */
             display: block;
             box-sizing: border-box;
         }
@@ -310,6 +362,15 @@
                 padding: 5vw;
                 height: 50vh;
             }
+            .hero-content {
+                position: static;
+                align-items: center;
+                margin-top: 5vw;
+            }
+            .contact-btn {
+                font-size: 1.2rem;
+                padding: 3vw 6vw;
+            }
             .portfolio-grid {
                 /* 2 columns on tablet/large phones */
                 grid-template-columns: repeat(2, 1fr);
@@ -338,8 +399,11 @@
 </head>
 <body>
     <div class="hero">
-        <img src="images/logo.png" alt="Logo" class="mobile-logo">
-        <h1>ISAAC<br>NORTHINGTON</h1>
+        <img src="images/logo.png" alt="Logo" class="mobile-logo" fetchpriority="low" decoding="async">
+        <div class="hero-content">
+            <h1>ISAAC<br>NORTHINGTON</h1>
+            <a href="mailto:isaacnorthington@icloud.com" class="contact-btn">Contact &#8594;</a>
+        </div>
     </div>
 
     <div class="portfolio-grid" id="portfolioGrid">
@@ -348,6 +412,7 @@
 
     <!-- Project Reveal Screen -->
     <div class="project-view" id="projectView">
+        <img src="" alt="Project Logo" class="project-view-logo" id="projLogo" decoding="async">
         <button class="back-button" id="backBtn">&#8592;Back</button>
         <div class="project-content">
             <h2 id="projTitle">Project Title</h2>
@@ -406,10 +471,17 @@
         const backBtn = document.getElementById('backBtn');
         let savedScrollPosition = 0;
 
+        // ESC Key to Go Back
+        document.addEventListener('keydown', (e) => {
+            if (e.key === 'Escape' && projectView.classList.contains('active')) {
+                backBtn.click();
+            }
+        });
+
         // Back Button Logic
         backBtn.addEventListener('click', () => {
             // Restore Original Background
-            document.documentElement.style.setProperty('--site-bg', '#0064FD');
+            document.documentElement.style.setProperty('--site-bg', '#488258');
             
             // Hide Detail View
             projectView.classList.remove('active');
@@ -417,14 +489,19 @@
             // Restore Cards with fluid delay
             const allCards = document.querySelectorAll('.project-card');
             allCards.forEach((c) => {
-                c.style.transitionDelay = '0s'; // Instant un-hide stagger
+                c.style.transitionDelay = '0s'; // Instant un-hide stagger start
                 c.classList.remove('slide-out');
             });
             
             // Restore Text & Logo Structure
-            document.querySelector('h1').style.transform = 'translateY(0)';
+            document.querySelector('.hero-content').style.transition = 'transform 0.45s cubic-bezier(0.25, 0.46, 0.45, 0.94), opacity 0.45s ease';
+            document.querySelector('.hero-content').style.transform = 'scale(1)';
+            document.querySelector('.hero-content').style.opacity = '1';
+            
             if(document.querySelector('.mobile-logo')) {
-                document.querySelector('.mobile-logo').style.transform = 'translateY(0)';
+                document.querySelector('.mobile-logo').style.transition = 'transform 0.45s cubic-bezier(0.25, 0.46, 0.45, 0.94), opacity 0.45s ease';
+                document.querySelector('.mobile-logo').style.transform = 'scale(1)';
+                document.querySelector('.mobile-logo').style.opacity = '1';
             }
             
             // Restore exactly where the user was scrolled
@@ -485,16 +562,19 @@
                             c.classList.add('slide-out');
                         });
                         
-                        document.querySelector('h1').style.transition = 'transform 0.6s ease';
-                        document.querySelector('h1').style.transform = 'translateY(-150vh)';
+                        document.querySelector('.hero-content').style.transition = 'transform 0.45s cubic-bezier(0.25, 0.46, 0.45, 0.94), opacity 0.4s ease';
+                        document.querySelector('.hero-content').style.transform = 'scale(0.95)';
+                        document.querySelector('.hero-content').style.opacity = '0';
 
                         if(document.querySelector('.mobile-logo')) {
-                            document.querySelector('.mobile-logo').style.transition = 'transform 0.6s ease';
-                            document.querySelector('.mobile-logo').style.transform = 'translateY(-150vh)';
+                            document.querySelector('.mobile-logo').style.transition = 'transform 0.45s cubic-bezier(0.25, 0.46, 0.45, 0.94), opacity 0.4s ease';
+                            document.querySelector('.mobile-logo').style.transform = 'scale(0.95)';
+                            document.querySelector('.mobile-logo').style.opacity = '0';
                         }
 
                         // 3. Inject Details into the Real View Panel
                         document.getElementById('projTitle').innerText = proj.name || folder;
+                        document.getElementById('projLogo').src = proj.icon || '';
                         
                         // Fetch Description from txt file
                         document.getElementById('projDesc').innerText = 'Loading...';
@@ -513,6 +593,8 @@
                                 const imgEl = document.createElement('img');
                                 imgEl.src = img.src;
                                 imgEl.alt = img.alt || '';
+                                imgEl.loading = 'lazy'; // Tells browser to wait until you scroll near them
+                                imgEl.decoding = 'async'; // Prevents image processing from blocking page animations
                                 // Determine grid size based on aspect ratio after loading
                                 imgEl.onload = () => {
                                     const ratio = imgEl.naturalWidth / imgEl.naturalHeight;
