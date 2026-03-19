@@ -260,14 +260,32 @@
             }
         }
 
-        .project-images img {
+        .project-image-wrapper {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
             width: 100%;
             height: 100%;
-            object-fit: cover;
+            box-sizing: border-box;
+        }
+
+        .project-image-wrapper img {
+            max-width: 100%;
+            max-height: calc(100% - 2.5rem); /* leave room for caption */
+            object-fit: contain; /* ensures whole image is visible */
             border-radius: 24px; /* rounded radius */
-            border: 4px solid white; /* white border */
+            border: 8px solid white; /* thicker outline by 2x */
             display: block;
             box-sizing: border-box;
+        }
+
+        .project-image-caption {
+            margin-top: 0.8rem;
+            color: white;
+            font-size: 1rem;
+            text-align: center;
+            width: 100%;
         }
 
         .img-size-1x1 { grid-column: span 1; grid-row: span 1; }
@@ -489,6 +507,9 @@
                         imgContainer.innerHTML = ''; // clear from previous visits
                         if (proj.images && proj.images.length > 0) {
                             proj.images.forEach(img => {
+                                const wrapper = document.createElement('div');
+                                wrapper.className = 'project-image-wrapper';
+
                                 const imgEl = document.createElement('img');
                                 imgEl.src = img.src;
                                 imgEl.alt = img.alt || '';
@@ -496,14 +517,24 @@
                                 imgEl.onload = () => {
                                     const ratio = imgEl.naturalWidth / imgEl.naturalHeight;
                                     if (ratio > 1.4) {
-                                        imgEl.classList.add('img-size-2x1');
+                                        wrapper.classList.add('img-size-2x1');
                                     } else if (ratio < 0.7) {
-                                        imgEl.classList.add('img-size-1x2');
+                                        wrapper.classList.add('img-size-1x2');
                                     } else {
-                                        imgEl.classList.add('img-size-1x1');
+                                        wrapper.classList.add('img-size-1x1');
                                     }
                                 };
-                                imgContainer.appendChild(imgEl);
+                                
+                                wrapper.appendChild(imgEl);
+                                
+                                if (img.caption) {
+                                    const captionEl = document.createElement('div');
+                                    captionEl.className = 'project-image-caption';
+                                    captionEl.innerText = img.caption;
+                                    wrapper.appendChild(captionEl);
+                                }
+
+                                imgContainer.appendChild(wrapper);
                             });
                         }
 
