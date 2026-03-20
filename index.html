@@ -577,11 +577,11 @@
                         document.getElementById('projLogo').src = proj.icon || '';
                         
                         // Fetch Description from txt file
-                        document.getElementById('projDesc').innerText = 'Loading...';
+                        document.getElementById('projDesc').innerHTML = 'Loading...';
                         fetch(`projects/${folder}/description.txt`)
                             .then(r => { if(r.ok) return r.text(); return proj.description || ''; })
-                            .then(text => document.getElementById('projDesc').innerText = text)
-                            .catch(() => document.getElementById('projDesc').innerText = proj.description || '');
+                            .then(text => document.getElementById('projDesc').innerHTML = text)
+                            .catch(() => document.getElementById('projDesc').innerHTML = proj.description || '');
                         
                         const imgContainer = document.getElementById('projImages');
                         imgContainer.innerHTML = ''; // clear from previous visits
@@ -591,12 +591,10 @@
                                 wrapper.className = 'project-image-wrapper';
 
                                 const imgEl = document.createElement('img');
-                                imgEl.src = img.src;
                                 imgEl.alt = img.alt || '';
-                                imgEl.loading = 'lazy'; // Tells browser to wait until you scroll near them
-                                imgEl.decoding = 'async'; // Prevents image processing from blocking page animations
-                                // Determine grid size based on aspect ratio after loading
-                                imgEl.onload = () => {
+                                
+                                const applySize = () => {
+                                    if (!imgEl.naturalHeight) return; // Prevent div/0
                                     const ratio = imgEl.naturalWidth / imgEl.naturalHeight;
                                     if (ratio > 1.4) {
                                         wrapper.classList.add('img-size-2x1');
@@ -606,6 +604,21 @@
                                         wrapper.classList.add('img-size-1x1');
                                     }
                                 };
+
+                                imgEl.onload = applySize;
+
+                                // Fallback if an image fails to load
+                                imgEl.onerror = () => {
+                                    console.warn('Image failed to load:', img.src);
+                                    wrapper.classList.add('img-size-1x1'); 
+                                };
+
+                                imgEl.src = img.src;
+                                
+                                // Safari/WebKit Cache bypass (fires immediately if already rendered)
+                                if (imgEl.complete) {
+                                    applySize();
+                                }
                                 
                                 wrapper.appendChild(imgEl);
                                 
