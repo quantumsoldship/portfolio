@@ -4,6 +4,11 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Isaac Northington</title>
+    <!-- Preload crucial fonts for performance -->
+    <link rel="preload" href="./fonts/calla.otf" as="font" type="font/otf" crossorigin>
+    <link rel="preload" href="./fonts/VulfMonoDemo-Regular.otf" as="font" type="font/otf" crossorigin>
+    <link rel="preload" href="./fonts/VulfMonoDemo-Bold.otf" as="font" type="font/otf" crossorigin>
+    <link rel="preload" href="./fonts/Megna-MediumText.woff" as="font" type="font/woff" crossorigin>
     <style>
         :root {
             --site-bg: #488258;
@@ -17,8 +22,32 @@
 
         @font-face {
             font-family: 'Megna';
-            src: url('./fonts/megna-mediumtext.woff') format('woff');
+            src: url('./fonts/Megna-MediumText.woff') format('woff');
             font-weight: normal;
+            font-style: normal;
+            font-display: swap;
+        }
+
+        @font-face {
+            font-family: 'Vulf Mono';
+            src: url('./fonts/VulfMonoDemo-Regular.otf') format('opentype');
+            font-weight: normal;
+            font-style: normal;
+            font-display: swap;
+        }
+
+        @font-face {
+            font-family: 'Vulf Mono';
+            src: url('./fonts/VulfMonoDemo-Italic.otf') format('opentype');
+            font-weight: normal;
+            font-style: italic;
+            font-display: swap;
+        }
+
+        @font-face {
+            font-family: 'Vulf Mono';
+            src: url('./fonts/VulfMonoDemo-Bold.otf') format('opentype');
+            font-weight: bold;
             font-style: normal;
             font-display: swap;
         }
@@ -67,6 +96,9 @@
         .hero {
             height: 100vh;
             position: relative;
+            display: flex;
+            justify-content: center;
+            align-items: center;
         }
 
         .mobile-logo {
@@ -80,20 +112,57 @@
         }
 
         .hero-content {
-            position: absolute;
-            bottom: 5vw;
-            right: 5vw;
             display: flex;
             flex-direction: column;
-            align-items: flex-end;
+            align-items: center;
             gap: 1.5vw;
             z-index: 10;
+            position: relative;
+        }
+
+        .scatter-container {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100vw;
+            height: 100vh;
+            pointer-events: none;
+            z-index: 1;
+            overflow: hidden;
+        }
+
+        .scatter-img {
+            position: absolute;
+            object-fit: contain;
+            opacity: 1;
+        }
+
+        .signature {
+            position: absolute;
+            top: -5vw;
+            right: -10vw;
+            width: 25vw;
+            max-width: 250px;
+            z-index: 12;
+            pointer-events: none;
+            
+        }
+
+        @media (max-width: 768px) {
+            .scatter-container {
+                display: none; /* Hide cluttered scattered images on very small screens to keep text legible */
+            }
+            .signature {
+                top: -8vw;
+                right: 0;
+                width: 40vw;
+            }
         }
 
         h1 {
             font-family: 'Calla', sans-serif;
             font-size: 12vw;
-            text-align: right;
+            text-align: center;
             margin: 0;
             line-height: 1.1;
             word-wrap: break-word;
@@ -101,7 +170,8 @@
         }
 
         .contact-btn {
-            font-family: 'Megna', sans-serif;
+            font-family: 'Vulf Mono', monospace;
+            font-weight: bold;
             background-color: white;
             color: var(--site-bg);
             text-decoration: none;
@@ -253,7 +323,7 @@
             opacity: 0.5;
             z-index: 0;
             pointer-events: none;
-            filter: brightness(0) invert(1);
+            
         }
 
         .project-content {
@@ -288,6 +358,9 @@
         }
         
         .project-content p {
+            font-family: 'Vulf Mono', monospace;
+            font-weight: normal;
+            font-style: normal;
             font-size: clamp(1rem, 2.5vw, 1.25rem);
             max-width: 800px;
             line-height: 1.6;
@@ -295,36 +368,37 @@
         }
 
         .project-images {
-            display: grid;
-            grid-template-columns: repeat(2, 1fr);
-            grid-auto-rows: calc((100vw - 12vw) / 2); /* 90vw padding area - 2vw gap = 88vw / 2 = 44vw */
-            grid-auto-flow: dense;
-            gap: 2vw;
+            column-count: 2;
+            column-gap: 2vw;
             width: 100%;
             margin-bottom: 4vw;
         }
 
         @media (min-width: 1200px) {
             .project-images {
-                grid-template-columns: repeat(3, 1fr);
-                grid-auto-rows: calc((100vw - 14vw) / 3); /* 90vw padding area - 4vw total gap = 86vw / 3 = ~28.6vw */
+                column-count: 3;
+            }
+        }
+
+        @media (max-width: 768px) {
+            .project-images {
+                column-count: 1; /* Keep simple on phones, or 2 if preferred */
             }
         }
 
         .project-image-wrapper {
+            break-inside: avoid;
+            margin-bottom: 2vw;
             display: flex;
             flex-direction: column;
             align-items: center;
-            justify-content: center;
             width: 100%;
-            height: 100%;
             box-sizing: border-box;
         }
 
         .project-image-wrapper img {
-            max-width: 100%;
-            max-height: calc(100% - 2.5rem); /* leave room for caption */
-            object-fit: contain; /* ensures whole image is visible */
+            width: 100%;
+            height: auto;
             border-radius: 24px; /* rounded radius */
             border: 8px solid white; /* thicker outline by 2x */
             background-color: white; /* Ensure transparent PNGs stay opaque over the background */
@@ -333,17 +407,15 @@
         }
 
         .project-image-caption {
+            font-family: 'Vulf Mono', monospace;
+            font-style: italic;
             margin-top: 0.8rem;
+            margin-bottom: 1rem;
             color: white;
             font-size: 1rem;
             text-align: center;
             width: 100%;
         }
-
-        .img-size-1x1 { grid-column: span 1; grid-row: span 1; }
-        .img-size-2x1 { grid-column: span 2; grid-row: span 1; }
-        .img-size-1x2 { grid-column: span 1; grid-row: span 2; }
-        .img-size-2x2 { grid-column: span 2; grid-row: span 2; }
 
         /* Mobile Adjustments (2x2 or 1x1) */
         @media (max-width: 768px) {
@@ -361,11 +433,15 @@
                 align-items: center;
                 padding: 5vw;
                 height: 50vh;
+                position: relative;
             }
             .hero-content {
-                position: static;
+                position: absolute;
+                bottom: 5vw;
+                left: 50%;
+                transform: translateX(-50%);
                 align-items: center;
-                margin-top: 5vw;
+                margin-top: 0;
             }
             .contact-btn {
                 font-size: 1.2rem;
@@ -400,9 +476,53 @@
 <body>
     <div class="hero">
         <img src="images/logo.png" alt="Logo" class="mobile-logo" fetchpriority="low" decoding="async">
+        
+    <div class="scatter-container">
+        <img src="images/homepage/slice1.png" class="scatter-img" style="top: 60.179046111925786%; left: 4.7307882780100465%; width: 3.4973124534889006vw; transform: rotate(334deg);" alt="" aria-hidden="true">
+        <img src="images/homepage/slice2.png" class="scatter-img" style="top: 63.53517628690763%; left: 86.00358721598663%; width: 5.032650557929276vw; transform: rotate(44deg);" alt="" aria-hidden="true">
+        <img src="images/homepage/slice3.png" class="scatter-img" style="top: 5.213940719216114%; left: 21.24428838834077%; width: 3.757521954497866vw; transform: rotate(323deg);" alt="" aria-hidden="true">
+        <img src="images/homepage/slice4.png" class="scatter-img" style="top: 77.11098961683143%; left: 5.602351151514962%; width: 4.204209407278528vw; transform: rotate(284deg);" alt="" aria-hidden="true">
+        <img src="images/homepage/slice5.png" class="scatter-img" style="top: 88.16401678885897%; left: 45.33459779204216%; width: 3.4594839305946343vw; transform: rotate(358deg);" alt="" aria-hidden="true">
+        <img src="images/homepage/slice6.png" class="scatter-img" style="top: 50.187653317302285%; left: 10.91112091841175%; width: 5.311039482430267vw; transform: rotate(59deg);" alt="" aria-hidden="true">
+        <img src="images/homepage/slice7.png" class="scatter-img" style="top: 16.686494823898563%; left: 13.315103501399195%; width: 4.361728839129828vw; transform: rotate(150deg);" alt="" aria-hidden="true">
+        <img src="images/homepage/slice8.png" class="scatter-img" style="top: 84.59909520261475%; left: 37.792839864194995%; width: 4.699795817494434vw; transform: rotate(328deg);" alt="" aria-hidden="true">
+        <img src="images/homepage/slice9.png" class="scatter-img" style="top: 12.64194177799177%; left: 32.89513639090989%; width: 3.2428550921583543vw; transform: rotate(280deg);" alt="" aria-hidden="true">
+        <img src="images/homepage/slice10.png" class="scatter-img" style="top: 15.652160423969748%; left: 5.649008256145161%; width: 3.197872623140406vw; transform: rotate(244deg);" alt="" aria-hidden="true">
+        <img src="images/homepage/slice11.png" class="scatter-img" style="top: 83.11104065672606%; left: 90.5891166257984%; width: 4.215453701466933vw; transform: rotate(242deg);" alt="" aria-hidden="true">
+        <img src="images/homepage/slice12.png" class="scatter-img" style="top: 2.9764889252451363%; left: 80.32310128106056%; width: 4.066837585739792vw; transform: rotate(310deg);" alt="" aria-hidden="true">
+        <img src="images/homepage/slice13.png" class="scatter-img" style="top: 9.093066068900049%; left: 51.80708328448819%; width: 5.062349968392301vw; transform: rotate(160deg);" alt="" aria-hidden="true">
+        <img src="images/homepage/slice14.png" class="scatter-img" style="top: 75.45707708886309%; left: 13.62860295707332%; width: 4.4965925550810955vw; transform: rotate(251deg);" alt="" aria-hidden="true">
+        <img src="images/homepage/slice15.png" class="scatter-img" style="top: 51.72080637388255%; left: 2.856152014162698%; width: 3.2691530535852467vw; transform: rotate(143deg);" alt="" aria-hidden="true">
+        <img src="images/homepage/slice16.png" class="scatter-img" style="top: 11.466645681994075%; left: 66.26775345659951%; width: 5.212381940796251vw; transform: rotate(4deg);" alt="" aria-hidden="true">
+        <img src="images/homepage/slice17.png" class="scatter-img" style="top: 79.30847471007803%; left: 53.1778259946753%; width: 3.545090692507216vw; transform: rotate(302deg);" alt="" aria-hidden="true">
+        <img src="images/homepage/slice18.png" class="scatter-img" style="top: 48.322148046954055%; left: 83.31751821900605%; width: 4.119778397474032vw; transform: rotate(349deg);" alt="" aria-hidden="true">
+        <img src="images/homepage/slice19.png" class="scatter-img" style="top: 86.00477911212279%; left: 81.1119223543171%; width: 5.136378328439431vw; transform: rotate(266deg);" alt="" aria-hidden="true">
+        <img src="images/homepage/slice20.png" class="scatter-img" style="top: 11.33527664077141%; left: 44.83455178807931%; width: 3.2620551550708727vw; transform: rotate(223deg);" alt="" aria-hidden="true">
+        <img src="images/homepage/slice21.png" class="scatter-img" style="top: 18.48542180857933%; left: 90.96543394565549%; width: 4.23961290511105vw; transform: rotate(97deg);" alt="" aria-hidden="true">
+        <img src="images/homepage/slice23.png" class="scatter-img" style="top: 88.06942791265492%; left: 21.143655272892563%; width: 5.282967460144112vw; transform: rotate(68deg);" alt="" aria-hidden="true">
+        <img src="images/homepage/slice24.png" class="scatter-img" style="top: 50.26510010850202%; left: 90.07393214410642%; width: 4.550508961595401vw; transform: rotate(59deg);" alt="" aria-hidden="true">
+        <img src="images/homepage/slice25.png" class="scatter-img" style="top: 35.30053672515707%; left: 0.23074184956314364%; width: 5.288796713170314vw; transform: rotate(20deg);" alt="" aria-hidden="true">
+        <img src="images/homepage/slice26.png" class="scatter-img" style="top: 77.80075583520711%; left: 70.80008870672603%; width: 4.511715140315969vw; transform: rotate(269deg);" alt="" aria-hidden="true">
+        <img src="images/homepage/slice27.png" class="scatter-img" style="top: 25.325727371975%; left: 81.10639026866318%; width: 5.624830036591603vw; transform: rotate(15deg);" alt="" aria-hidden="true">
+        <img src="images/homepage/slice28.png" class="scatter-img" style="top: 4.498125078122519%; left: 38.41844857096059%; width: 3.6573216219069273vw; transform: rotate(290deg);" alt="" aria-hidden="true">
+        <img src="images/homepage/slice29.png" class="scatter-img" style="top: 82.01811130655376%; left: 61.8640729084057%; width: 5.663858460683836vw; transform: rotate(293deg);" alt="" aria-hidden="true">
+        <img src="images/homepage/slice30.png" class="scatter-img" style="top: 35.77979083507207%; left: 9.926903874535594%; width: 5.967231902643425vw; transform: rotate(113deg);" alt="" aria-hidden="true">
+        <img src="images/homepage/slice31.png" class="scatter-img" style="top: 15.423087393562824%; left: 73.50896592692833%; width: 4.72456264456446vw; transform: rotate(178deg);" alt="" aria-hidden="true">
+        <img src="images/homepage/slice32.png" class="scatter-img" style="top: 83.01081265405762%; left: 30.25062623192784%; width: 3.1251037164001585vw; transform: rotate(343deg);" alt="" aria-hidden="true">
+        <img src="images/homepage/slice33.png" class="scatter-img" style="top: 37.4707142365384%; left: 84.0510229071216%; width: 4.001820190532707vw; transform: rotate(114deg);" alt="" aria-hidden="true">
+        <img src="images/homepage/slice34.png" class="scatter-img" style="top: 5.298467610103077%; left: 1.9629173547028587%; width: 3.3891191855855793vw; transform: rotate(51deg);" alt="" aria-hidden="true">
+        <img src="images/homepage/slice35.png" class="scatter-img" style="top: 0.9848462500024924%; left: 87.44112484366563%; width: 5.635147973897443vw; transform: rotate(305deg);" alt="" aria-hidden="true">
+        <img src="images/homepage/slice36.png" class="scatter-img" style="top: 14.240563594051078%; left: 25.15603853758927%; width: 4.763298976812265vw; transform: rotate(141deg);" alt="" aria-hidden="true">
+        <img src="images/homepage/slice37.png" class="scatter-img" style="top: 87.04089197139615%; left: 1.24121925857414%; width: 5.082325095447803vw; transform: rotate(213deg);" alt="" aria-hidden="true">
+        <img src="images/homepage/slice38.png" class="scatter-img" style="top: 88.35473482773712%; left: 9.620991563566424%; width: 3.5249566836271056vw; transform: rotate(317deg);" alt="" aria-hidden="true">
+        <img src="images/homepage/slice39.png" class="scatter-img" style="top: 0.5702344041917051%; left: 8.952804564932196%; width: 5.793405877234666vw; transform: rotate(156deg);" alt="" aria-hidden="true">
+        <img src="images/homepage/slice40.png" class="scatter-img" style="top: 88.18651410747015%; left: 53.94174685629393%; width: 4.365745819575974vw; transform: rotate(145deg);" alt="" aria-hidden="true">
+    </div>
+
         <div class="hero-content">
-            <h1>ISAAC<br>NORTHINGTON</h1>
-            <a href="mailto:isaacnorthington@icloud.com" class="contact-btn">Contact &#8594;</a>
+            <img src="images/homepage/signature.png" alt="Signature" class="signature">
+                                                                                                            <h1>ISAAC<br>NORTHINGTON</h1>
+            <a href="mailto:isaacnorthington@icloud.com" class="contact-btn">contact &#8594;</a>
         </div>
     </div>
 
@@ -525,15 +645,27 @@
                 folderNames = ["airball", "bc1", "callos", "fod", "gyrochord", "in"];
             }
 
-            // 2. Load the JSONs iteratively based on the fetched order
-            for (const folder of folderNames) {
+            // 2. Load the JSONs in parallel but render in order
+            const fetchPromises = folderNames.map(async (folder) => {
                 try {
                     const res = await fetch(`projects/${folder}/${folder}.json`);
-                    if (!res.ok) continue;
-                    
+                    if (!res.ok) return null;
                     const data = await res.json();
-                    const proj = data.project;
+                    return { folder, proj: data.project };
+                } catch (e) {
+                    console.warn(`Could not load ${folder}.json`, e);
+                    return null;
+                }
+            });
 
+            const projectsData = await Promise.all(fetchPromises);
+
+            for (const item of projectsData) {
+                if (!item) continue;
+                
+                const { folder, proj } = item;
+
+                try {
                     const card = document.createElement('div');
                     const sizeClass = proj.size ? `size-${proj.size}` : 'size-1x1';
                     card.className = `project-card ${sizeClass}`;
@@ -592,33 +724,14 @@
 
                                 const imgEl = document.createElement('img');
                                 imgEl.alt = img.alt || '';
-                                
-                                const applySize = () => {
-                                    if (!imgEl.naturalHeight) return; // Prevent div/0
-                                    const ratio = imgEl.naturalWidth / imgEl.naturalHeight;
-                                    if (ratio > 1.4) {
-                                        wrapper.classList.add('img-size-2x1');
-                                    } else if (ratio < 0.7) {
-                                        wrapper.classList.add('img-size-1x2');
-                                    } else {
-                                        wrapper.classList.add('img-size-1x1');
-                                    }
-                                };
-
-                                imgEl.onload = applySize;
 
                                 // Fallback if an image fails to load
                                 imgEl.onerror = () => {
                                     console.warn('Image failed to load:', img.src);
-                                    wrapper.classList.add('img-size-1x1'); 
                                 };
 
                                 imgEl.src = img.src;
-                                
-                                // Safari/WebKit Cache bypass (fires immediately if already rendered)
-                                if (imgEl.complete) {
-                                    applySize();
-                                }
+                                imgEl.loading = 'lazy'; // Add native lazy loading for performance
                                 
                                 wrapper.appendChild(imgEl);
                                 

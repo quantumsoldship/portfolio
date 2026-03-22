@@ -8,15 +8,33 @@
         "images": [
             {
                 "id": 1,
-                "src": "./images/image-1.png",
-                "alt": "Image description goes here",
-                "caption": "Optional caption"
+                "src": "./images/gyrochord/gyrchord.png",
+                "alt": "",
+                "caption": ""
             },
             {
                 "id": 2,
-                "src": "./images/image-2.png",
-                "alt": "Image description goes here",
-                "caption": "Optional caption"
+                "src": "./images/gyrochord/screenshot-.png",
+                "alt": "",
+                "caption": ""
+            },
+            {
+                "id": 3,
+                "src": "./images/gyrochord/screenshot-1.png",
+                "alt": "",
+                "caption": ""
+            },
+            {
+                "id": 4,
+                "src": "./images/gyrochord/screenshot-2.png",
+                "alt": "",
+                "caption": ""
+            },
+            {
+                "id": 5,
+                "src": "./images/gyrochord/screenshot-3.png",
+                "alt": "",
+                "caption": ""
             }
         ],
         "metadata": {

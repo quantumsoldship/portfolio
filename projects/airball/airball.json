@@ -8,15 +8,27 @@
         "images": [
             {
                 "id": 1,
-                "src": "./images/airball/img_1.png",
-                "alt": "The main logo for airball.",
-                "caption": "The main logo for airball."
+                "src": "./images/airball/img1.png",
+                "alt": "",
+                "caption": ""
             },
             {
                 "id": 2,
-                "src": "./images/airball/img_2.png",
-                "alt": "The logo for airball leagues.",
-                "caption": "The logo for airball leagues."
+                "src": "./images/airball/img2.png",
+                "alt": "",
+                "caption": ""
+            },
+            {
+                "id": 3,
+                "src": "./images/airball/img3.png",
+                "alt": "",
+                "caption": ""
+            },
+            {
+                "id": 4,
+                "src": "./images/airball/img4.png",
+                "alt": "",
+                "caption": ""
             }
         ],
         "metadata": {
