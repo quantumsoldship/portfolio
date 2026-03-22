@@ -10,22 +10,22 @@ boxes.push({x: 20, y: 25, w: 60, h: 50});
 
 let numPlaced = 0;
 for (let i = 1; i <= 40; i++) {
-    if (i === 22) continue; // skip 22
+    if (i === 7 || i === 22) continue; // skip 7 and 22
 
     let placed = false;
     let attempts = 0;
     
-    // Adjusted size smaller so we can successfully pack all 39 elements
-    let vw = 3 + Math.random() * 3; // 3vw to 6vw
+    // Kept large, but slightly tweaked to allow for higher density
+    let vw = 5 + Math.random() * 6; // 5vw to 11vw
     let vh = vw * 1.5; 
 
-    while (!placed && attempts < 25000) {
+    while (!placed && attempts < 250000) {
         let x = Math.random() * (96 - vw);
         let y = Math.random() * (96 - vh);
         
-        // Minor padding ensuring they absolutely never touch bounds
-        let padX = 1;  
-        let padY = 1.5;
+        // Minimized padding to allow more elements to fit snugly
+        let padX = 0.2;  
+        let padY = 0.2;
         
         let chX = x - padX;
         let chY = y - padY;
